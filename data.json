@@ -1,0 +1,9 @@
+{
+  "namaLes": "Les Privat",
+  "pinGuru": "1234",
+  "siswa": [
+    { "id": 1, "nama": "Ahmad Fauzi", "paket": 8, "hadir": 0, "riwayat": [] },
+    { "id": 2, "nama": "Bunga Lestari", "paket": 4, "hadir": 0, "riwayat": [] },
+    { "id": 3, "nama": "Citra Dewi", "paket": 8, "hadir": 0, "riwayat": [] }
+  ]
+}

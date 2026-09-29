@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Absensi Kursus</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">✓</div>
+
+            <div>
+                <h1>AbsensiKu</h1>
+                <p>Sistem Absensi Kursus</p>
+            </div>
+        </div>
+
+        <button class="teacher-btn" onclick="openTeacherLogin()">
+            👨‍🏫 Panel Tutor
+        </button>
+    </header>
+
+
+    <!-- HALAMAN UTAMA -->
+    <main class="container">
+
+        <section class="welcome">
+            <span class="welcome-badge">ABSENSI ONLINE</span>
+
+            <h2>Selamat Datang 👋</h2>
+
+            <p>
+                Silakan masukkan kode siswa untuk melakukan absensi.
+            </p>
+        </section>
+
+
+        <!-- LOGIN SISWA -->
+        <section class="student-login card">
+
+            <div class="section-title">
+                <span class="title-icon">🎓</span>
+
+                <div>
+                    <h3>Absensi Siswa</h3>
+                    <p>Masukkan kode siswa kamu</p>
+                </div>
+            </div>
+
+            <div class="input-group">
+
+                <label for="studentCode">
+                    Kode Siswa
+                </label>
+
+                <input
+                    type="text"
+                    id="studentCode"
+                    placeholder="Contoh: SISWA001"
+                    autocomplete="off"
+                >
+
+                <button
+                    class="primary-btn"
+                    onclick="loginStudent()"
+                >
+                    Masuk & Lihat Absensi
+                </button>
+
+            </div>
+
+            <div id="loginMessage"></div>
+
+        </section>
+
+
+        <!-- DASHBOARD SISWA -->
+        <section
+            id="studentDashboard"
+            class="student-dashboard hidden"
+        >
+
+            <!-- DATA SISWA -->
+            <div class="student-header card">
+
+                <div class="student-avatar">
+                    🎓
+                </div>
+
+                <div class="student-info">
+
+                    <span class="small-label">
+                        SISWA
+                    </span>
+
+                    <h2 id="studentName">
+                        -
+                    </h2>
+
+                    <p id="studentCodeDisplay">
+                        -
+                    </p>
+
+                </div>
+
+                <button
+                    class="logout-btn"
+                    onclick="logoutStudent()"
+                >
+                    Keluar
+                </button>
+
+            </div>
+
+
+            <!-- STATISTIK -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <span class="stat-icon">📚</span>
+
+                    <div>
+                        <p>Paket</p>
+                        <h3 id="packageTotal">4</h3>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <span class="stat-icon">✅</span>
+
+                    <div>
+                        <p>Sudah Hadir</p>
+                        <h3 id="attendanceTotal">0</h3>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <span class="stat-icon">🎯</span>
+
+                    <div>
+                        <p>Tersisa</p>
+                        <h3 id="remainingTotal">4</h3>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+            <div class="card progress-card">
+
+                <div class="progress-header">
+
+                    <div>
+                        <span class="small-label">
+                            PROGRESS PAKET
+                        </span>
+
+                        <h3 id="progressText">
+                            0 / 4 Pertemuan
+                        </h3>
+                    </div>
+
+                    <span
+                        id="packageStatus"
+                        class="status-badge"
+                    >
+                        AKTIF
+                    </span>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        id="progressFill"
+                        class="progress-fill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM ABSENSI -->
+            <div class="card attendance-card">
+
+                <div class="section-title">
+
+                    <span class="title-icon">
+                        📝
+                    </span>
+
+                    <div>
+                        <h3>Absensi Hari Ini</h3>
+
+                        <p id="todayDate">
+                            -
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="attendance-options">
+
+                    <button
+                        class="attendance-option active"
+                        data-status="Hadir"
+                        onclick="selectAttendance(this)"
+                    >
+                        <span>✅</span>
+                        <strong>Hadir</strong>
+                        <small>Hadir tepat waktu</small>
+                    </button>
+
+
+                    <button
+                        class="attendance-option"
+                        data-status="Terlambat"
+                        onclick="selectAttendance(this)"
+                    >
+                        <span>⏰</span>
+                        <strong>Terlambat</strong>
+                        <small>Datang terlambat</small>
+                    </button>
+
+
+                    <button
+                        class="attendance-option"
+                        data-status="Izin"
+                        onclick="selectAttendance(this)"
+                    >
+                        <span>📄</span>
+                        <strong>Izin</strong>
+                        <small>Tidak dapat hadir</small>
+                    </button>
+
+
+                    <button
+                        class="attendance-option"
+                        data-status="Sakit"
+                        onclick="selectAttendance(this)"
+                    >
+                        <span>🤒</span>
+                        <strong>Sakit</strong>
+                        <small>Tidak hadir karena sakit</small>
+                    </button>
+
+                </div>
+
+
+                <button
+                    id="attendanceButton"
+                    class="primary-btn attendance-submit"
+                    onclick="submitAttendance()"
+                >
+                    ✓ Kirim Absensi
+                </button>
+
+                <div id="attendanceMessage"></div>
+
+            </div>
+
+
+            <!-- RIWAYAT -->
+            <div class="card history-card">
+
+                <div class="section-title">
+
+                    <span class="title-icon">
+                        📋
+                    </span>
+
+                    <div>
+                        <h3>Riwayat Absensi</h3>
+
+                        <p>
+                            Riwayat kehadiran kamu
+                        </p>
+                    </div>
+
+                </div>
+
+                <div id="attendanceHistory">
+                    <div class="empty-history">
+                        Belum ada riwayat absensi.
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL TUTOR -->
+    <div
+        id="teacherModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-box">
+
+            <button
+                class="close-modal"
+                onclick="closeTeacherLogin()"
+            >
+                ×
+            </button>
+
+            <div class="modal-icon">
+                👨‍🏫
+            </div>
+
+            <h2>Panel Tutor</h2>
+
+            <p>
+                Masukkan PIN tutor untuk melanjutkan.
+            </p>
+
+            <input
+                type="password"
+                id="teacherPin"
+                placeholder="PIN Tutor"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="loginTeacher()"
+            >
+                Masuk
+            </button>
+
+            <div id="teacherMessage"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD TUTOR -->
+    <div
+        id="teacherDashboard"
+        class="teacher-dashboard hidden"
+    >
+
+        <div class="teacher-topbar">
+
+            <div>
+                <span class="small-label">
+                    PANEL TUTOR
+                </span>
+
+                <h2>
+                    Dashboard Absensi
+                </h2>
+            </div>
+
+            <button
+                class="logout-btn"
+                onclick="logoutTeacher()"
+            >
+                Keluar
+            </button>
+
+        </div>
+
+
+        <div class="teacher-content">
+
+            <!-- STATISTIK TUTOR -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <span class="stat-icon">👥</span>
+
+                    <div>
+                        <p>Total Siswa</p>
+                        <h3 id="totalStudents">0</h3>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <span class="stat-icon">📅</span>
+
+                    <div>
+                        <p>Total Absensi</p>
+                        <h3 id="totalAttendance">0</h3>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <span class="stat-icon">🏆</span>
+
+                    <div>
+                        <p>Paket Selesai</p>
+                        <h3 id="completedPackages">0</h3>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- TAMBAH SISWA -->
+            <div class="card">
+
+                <div class="section-title">
+
+                    <span class="title-icon">
+                        ➕
+                    </span>
+
+                    <div>
+                        <h3>Tambah Siswa</h3>
+
+                        <p>
+                            Tambahkan siswa baru
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+
+                        <label>
+                            Nama Siswa
+                        </label>
+
+                        <input
+                            type="text"
+                            id="newStudentName"
+                            placeholder="Nama lengkap"
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>
+                            Kode Siswa
+                        </label>
+
+                        <input
+                            type="text"
+                            id="newStudentCode"
+                            placeholder="Contoh: SISWA002"
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>
+                            Paket Pertemuan
+                        </label>
+
+                        <select id="newStudentPackage">
+
+                            <option value="4">
+                                4 Pertemuan
+                            </option>
+
+                            <option value="8">
+                                8 Pertemuan
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="primary-btn"
+                    onclick="addStudent()"
+                >
+                    + Tambah Siswa
+                </button>
+
+                <div id="addStudentMessage"></div>
+
+            </div>
+
+
+            <!-- DAFTAR SISWA -->
+            <div class="card">
+
+                <div class="section-title">
+
+                    <span class="title-icon">
+                        👥
+                    </span>
+
+                    <div>
+                        <h3>Daftar Siswa</h3>
+
+                        <p>
+                            Data seluruh siswa
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Kode
+                                </th>
+
+                                <th>
+                                    Nama
+                                </th>
+
+                                <th>
+                                    Progress
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Aksi
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="studentTableBody">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ABSENSI HARI INI -->
+            <div class="card">
+
+                <div class="section-title">
+
+                    <span class="title-icon">
+                        📅
+                    </span>
+
+                    <div>
+                        <h3>Absensi Hari Ini</h3>
+
+                        <p>
+                            Siswa yang sudah melakukan absensi
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="todayAttendanceList">
+                    <div class="empty-history">
+                        Belum ada absensi hari ini.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
